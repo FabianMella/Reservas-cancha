@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f6b3a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#101612" media="(prefers-color-scheme: dark)">
+  <title>Reservas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Reservá la cancha</h1>
+      <p class="sub">Abierto todos los días de 12:00 a 00:00 · turnos de 1 hora</p>
+    </div>
+    <a class="btn-panel" href="dueno.html">Panel de control</a>
+  </header>
+
+  <p id="aviso" class="msg err" hidden></p>
+
+  <section style="display:grid;gap:20px">
+    <div>
+      <h2>1. Elegí el día</h2>
+      <div class="days" id="days"></div>
+    </div>
+    <div>
+      <h2>2. Elegí la hora</h2>
+      <p class="note pista">¿Reservaste y no podés ir? Tocá tu horario reservado para cancelarlo.</p>
+      <div class="grid" id="grid"></div>
+      <p class="note" id="cargando" style="margin-top:8px">Cargando horarios…</p>
+    </div>
+    <form class="card" id="form" hidden>
+      <h2 style="margin:0">3. Tus datos</h2>
+      <fieldset class="frecuencia">
+        <legend>¿Cada cuánto?</legend>
+        <label class="opcion"><input type="radio" name="frec" value="una" checked><span>Solo esta vez</span></label>
+        <label class="opcion"><input type="radio" name="frec" value="semanal"><span id="frec-semanal">Todas las semanas</span></label>
+      </fieldset>
+      <p class="note" id="frec-nota" hidden>Queda reservado ese día y horario todas las semanas.</p>
+      <p class="msg" id="resumen"></p>
+      <div class="row">
+        <label for="nombre">Nombre<input id="nombre" required maxlength="60" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Ej: Juan Pérez"></label>
+        <label for="tel">Tu teléfono<input id="tel" type="tel" required maxlength="20" autocomplete="tel" enterkeyhint="send" placeholder="Ej: 11 5555 1234"></label>
+      </div>
+      <div id="captcha"></div>
+      <button class="btn" id="confirmar" type="submit">Confirmar reserva</button>
+      <p class="msg" id="formmsg"></p>
+    </form>
+    <form class="card" id="cancelar" hidden>
+      <h2 style="margin:0">Cancelar mi turno</h2>
+      <p class="msg" id="c-resumen"></p>
+      <fieldset class="frecuencia" id="c-frec" hidden>
+        <legend>¿Qué querés cancelar?</legend>
+        <label class="opcion"><input type="radio" name="cfrec" value="dia" checked><span>Solo este día</span></label>
+        <label class="opcion"><input type="radio" name="cfrec" value="todas"><span id="c-todas">Todas las semanas</span></label>
+      </fieldset>
+      <label for="c-nombre">Nombre con el que reservaste<input id="c-nombre" required maxlength="60" autocomplete="name" autocapitalize="words" enterkeyhint="done" placeholder="El mismo que pusiste al reservar"></label>
+      <div id="captcha-cancelar"></div>
+      <button class="btn peligro" id="c-confirmar" type="submit">Cancelar turno</button>
+      <p class="msg" id="c-msg" role="alert"></p>
+    </form>
+    <div class="card" id="listo" hidden>
+      <p class="msg ok" id="listotxt"></p>
+      <p class="note" id="listonota">Tu turno ya quedó anotado.</p>
+      <button class="btn ghost" id="otra" type="button">Hacer otra reserva</button>
+    </div>
+  </section>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script><!-- versión fija + huella: si el archivo cambia, el navegador no lo carga -->
+<script src="js/config.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/reservar.js"></script>
+</body>
+</html>

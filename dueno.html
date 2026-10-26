@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f6b3a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#101612" media="(prefers-color-scheme: dark)">
+  <meta name="robots" content="noindex">
+  <title>Panel de control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<p class="note wrap" id="verificando">Cargando…</p>
+
+<!-- Si no entraste todavía: pedir la contraseña -->
+<div class="wrap" id="entrar-box" hidden>
+  <header>
+    <div>
+      <h1>Panel de control</h1>
+      <p class="sub">Solo para el dueño de la cancha</p>
+    </div>
+  </header>
+  <form class="card" id="login">
+    <input type="text" name="username" autocomplete="username" value="dueño" hidden><!-- para que el celular pueda recordar la contraseña -->
+    <label for="clave">Contraseña<input id="clave" type="password" required autocomplete="current-password" autocapitalize="off" enterkeyhint="go"></label>
+    <button class="btn" type="submit" id="entrar">Entrar</button>
+    <p class="msg" id="lockmsg" role="alert"></p>
+  </form>
+  <a class="btn ghost" href="index.html">Volver a reservar</a>
+</div>
+
+<!-- No se muestra nada hasta confirmar que la sesión es del dueño -->
+<div class="wrap" id="app" hidden>
+  <header>
+    <div>
+      <h1>Panel de control</h1>
+      <p class="sub">Agenda, ingresos y ajustes</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-agenda" aria-controls="vista-agenda" aria-selected="true">Agenda</button>
+      <button role="tab" id="tab-ingresos" aria-controls="vista-ingresos" aria-selected="false">Ingresos</button>
+      <button role="tab" id="tab-ajustes" aria-controls="vista-ajustes" aria-selected="false">Ajustes</button>
+    </div>
+  </header>
+
+  <p id="aviso" class="msg err" hidden></p>
+  <div class="stats" id="stats"></div>
+
+  <!-- AGENDA -->
+  <section id="vista-agenda" role="tabpanel" style="display:grid;gap:20px">
+    <div>
+      <h2>Próximos turnos</h2>
+      <div id="agenda"><p class="note">Cargando…</p></div>
+    </div>
+  </section>
+
+  <!-- INGRESOS -->
+  <section id="vista-ingresos" role="tabpanel" hidden style="display:grid;gap:20px">
+    <div class="card">
+      <div class="cabecera">
+        <h2 style="margin:0">Ganancia real</h2>
+        <label for="i-mes" class="solo-lector">Mes</label>
+        <select id="i-mes"></select>
+      </div>
+      <div class="plata"><b id="g-ganancia"></b><span id="g-cuenta"></span></div>
+      <dl class="desglose resultado" id="g-resultado"></dl>
+      <p class="note" id="g-nota"></p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0">Ingresos</h2>
+      <div class="plata chica"><b id="i-total"></b><span id="i-horas"></span></div>
+      <dl class="desglose" id="i-desglose"></dl>
+      <p class="note" id="i-nota"></p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0">Gastos del mes</h2>
+      <div id="g-lista"></div>
+      <button class="btn ghost" type="button" id="g-copiar" hidden>Copiar los gastos del mes pasado</button>
+      <form id="f-gasto" style="display:grid;gap:12px">
+        <div class="row">
+          <label for="g-concepto">Concepto<input id="g-concepto" required maxlength="40" list="g-sugerencias" autocapitalize="sentences" placeholder="Ej: Luz"></label>
+          <label for="g-monto">Monto ($)<input id="g-monto" type="number" required min="1" step="1" inputmode="numeric" placeholder="Ej: 85000"></label>
+        </div>
+        <button class="btn" type="submit">Agregar gasto</button>
+        <p class="msg" id="g-msg" role="alert"></p>
+      </form>
+      <datalist id="g-sugerencias">
+        <option value="Luz"><option value="Agua"><option value="Gas"><option value="Wifi / Internet"><option value="Alquiler">
+        <option value="Sueldos"><option value="Mantenimiento"><option value="Limpieza"><option value="Impuestos"><option value="Pelotas y redes">
+      </datalist>
+    </div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section id="vista-ajustes" role="tabpanel" hidden style="display:grid;gap:20px">
+    <form class="card" id="cfg">
+      <h2 style="margin:0">Reservas de clientes</h2>
+      <label for="precio">Precio por hora ($)
+        <input id="precio" type="number" min="0" step="1" inputmode="numeric" placeholder="Ej: 15000">
+      </label>
+      <p class="note">Se usa para calcular los ingresos del mes.</p>
+      <label for="maximo">Máximo de turnos activos por teléfono
+        <input id="maximo" type="number" min="1" max="20" inputmode="numeric">
+      </label>
+      <p class="note">Evita que alguien reserve todos los horarios. Las reservas que anotás vos no cuentan.</p>
+      <label for="maxfijos">Horas fijas que puede pedir cada teléfono desde la página
+        <input id="maxfijos" type="number" min="0" max="10" inputmode="numeric">
+      </label>
+      <p class="note">Con 0, nadie puede pedir horas fijas desde la página.</p>
+      <button class="btn" type="submit">Guardar</button>
+      <p class="msg" id="cfgmsg"></p>
+    </form>
+    <div class="card">
+      <h2 style="margin:0">Copia de seguridad</h2>
+      <p class="note">La página guarda solo el mes actual y el anterior: lo más viejo se borra solo para que la base no se llene. Si querés guardar el historial, descargalo antes de fin de mes (se abre con Excel).</p>
+      <button class="btn ghost" type="button" id="exportar">Descargar reservas (CSV)</button>
+      <p class="msg" id="expmsg"></p>
+    </div>
+    <form class="card" id="f-clave">
+      <h2 style="margin:0">Cambiar contraseña</h2>
+      <label for="c-actual">Contraseña actual<input id="c-actual" type="password" autocomplete="current-password"></label>
+      <div class="row">
+        <label for="c-nueva">Nueva<input id="c-nueva" type="password" autocomplete="new-password" minlength="8"></label>
+        <label for="c-rep">Repetir nueva<input id="c-rep" type="password" autocomplete="new-password"></label>
+      </div>
+      <button class="btn" type="submit">Cambiar contraseña</button>
+      <p class="msg" id="c-msg"></p>
+    </form>
+  </section>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="btn ghost" href="index.html">Ver página de reservas</a>
+    <button class="btn ghost" id="salir" type="button">Cerrar sesión</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script><!-- versión fija + huella: si el archivo cambia, el navegador no lo carga -->
+<script src="js/config.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/dueno.js"></script>
+</body>
+</html>

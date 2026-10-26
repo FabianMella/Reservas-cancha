@@ -1,0 +1,18 @@
+# Reglas de seguridad que el hosting (Netlify o Cloudflare) le manda al navegador.
+#
+# Content-Security-Policy: de dónde puede cargar cosas la página y a dónde puede mandar datos.
+#   · connect-src: solo a la propia página y a Supabase (cualquier proyecto *.supabase.co).
+#   · script-src: solo archivos propios, la librería de Supabase (jsdelivr) y el anti-robots (Cloudflare).
+#   · frame-ancestors 'none' + X-Frame-Options: nadie puede meter la página dentro de otra (clics engañosos).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src https://challenges.cloudflare.com; img-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+
+# El panel no tiene que aparecer en Google (Cloudflare lo sirve como /dueno, Netlify como /dueno.html)
+/dueno.html
+  X-Robots-Tag: noindex
+/dueno
+  X-Robots-Tag: noindex
